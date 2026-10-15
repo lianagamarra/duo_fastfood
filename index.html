@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Explora el menú de DUO FAST FOOD. Elige tus pizzas, picadas, chuzos y bebidas, y envía tu pedido por WhatsApp."
+    />
+    <meta name="theme-color" content="#171512" />
+    <title>DUO FAST FOOD | Menú digital</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Oswald:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="#inicio" aria-label="DUO FAST FOOD, ir al inicio">
+        <span class="brand-mark" aria-hidden="true"><span></span><span></span></span>
+        <span class="brand-name">DUO <b>FAST FOOD</b></span>
+      </a>
+      <nav class="desktop-nav" aria-label="Categorías del menú">
+        <a href="#pizzas">Pizzas</a>
+        <a href="#picadas">Picadas</a>
+        <a href="#chuzos">Chuzos</a>
+        <a href="#domingo">Especiales</a>
+        <a href="#bebidas">Bebidas</a>
+      </nav>
+      <button class="header-cart" type="button" data-open-cart aria-label="Abrir carrito">
+        <span class="cart-icon" aria-hidden="true">🛒</span>
+        <span>Mi pedido</span>
+        <span class="cart-count" data-cart-count>0</span>
+      </button>
+    </header>
+
+    <main id="inicio">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-content">
+          <p class="eyebrow"><span></span> Hecho para tus antojos</p>
+          <h1 id="hero-title">El sabor que<br />alegra tus <em>antojos.</em></h1>
+          <p class="hero-copy">Pizza, picadas y mucho más. Arma tu pedido a tu gusto y compártelo por WhatsApp.</p>
+          <a class="button button-primary hero-button" href="#pizzas">Explorar el menú <span aria-hidden="true">→</span></a>
+          <div class="hero-note"><span aria-hidden="true">✦</span> Buen sabor, buenos momentos.</div>
+        </div>
+        <div class="hero-photo" role="img" aria-label="Pizza recién horneada con queso y pepperoni">
+          <div class="hero-logo-card"><img src="assets/duo-fast-food-logo.png" alt="Logo de DUO FAST FOOD, pizzas y picadas" /></div>
+          <div class="hero-caption"><span>RECIÉN HECHO</span><i></i><span>PARA DISFRUTAR</span></div>
+        </div>
+        <div class="hero-index" aria-hidden="true">01 / BUEN PROVECHO</div>
+      </section>
+
+      <div class="menu-toolbar">
+        <div><span class="toolbar-dot"></span> Nuestro menú</div>
+        <span>PRECIOS EN PESOS COLOMBIANOS · COP</span>
+      </div>
+
+      <nav class="mobile-category-nav" aria-label="Categorías del menú">
+        <a href="#pizzas">🍕 Pizzas</a><a href="#picadas">😋 Picadas</a>
+        <a href="#chuzos">🍡 Chuzos</a><a href="#domingo">🔥 Domingo</a>
+        <a href="#bebidas">🥤 Bebidas</a>
+      </nav>
+
+      <div id="menu-sections" class="menu-sections"></div>
+
+      <section class="closing-banner">
+        <span class="closing-spark" aria-hidden="true">✳</span>
+        <div><p>¿Ya se te antojó?</p><h2>Tu próximo favorito<br />está a un pedido.</h2></div>
+        <button class="button button-light" type="button" data-open-cart>Armar mi pedido <span aria-hidden="true">→</span></button>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <a class="brand footer-brand" href="#inicio">
+        <span class="brand-mark" aria-hidden="true"><span></span><span></span></span>
+        <span class="brand-name">DUO <b>FAST FOOD</b></span>
+      </a>
+      <p>¡El sabor que alegra tus antojos!</p>
+      <span>© <span data-year></span> DUO FAST FOOD</span>
+    </footer>
+
+    <button class="mobile-cart-bar" type="button" data-open-cart>
+      <span class="mobile-cart-left"><span aria-hidden="true">🛒</span> Ver mi pedido <span class="cart-count" data-cart-count>0</span></span>
+      <strong data-cart-total>$0</strong>
+      <span class="mobile-cart-arrow" aria-hidden="true">→</span>
+    </button>
+
+    <dialog class="customize-dialog" aria-labelledby="customize-title">
+      <form method="dialog" class="dialog-top">
+        <button class="icon-button" aria-label="Cerrar" value="cancel">×</button>
+      </form>
+      <div class="customize-content"></div>
+    </dialog>
+
+    <dialog class="cart-dialog" aria-labelledby="cart-title">
+      <div class="cart-panel">
+        <div class="cart-heading">
+          <div><p class="eyebrow">TU PEDIDO</p><h2 id="cart-title">El carrito <span aria-hidden="true">🛒</span></h2></div>
+          <button class="icon-button" type="button" data-close-cart aria-label="Cerrar carrito">×</button>
+        </div>
+        <div class="cart-items"></div>
+        <form class="checkout-form" novalidate>
+          <div class="cart-total-row"><span>Total del pedido</span><strong data-checkout-total>$0</strong></div>
+          <label for="customer-name">Tu nombre <span>*</span></label>
+          <input id="customer-name" name="customerName" autocomplete="name" placeholder="¿Cómo te llamas?" required maxlength="60" />
+          <label for="order-notes">Observaciones <span class="optional">(opcional)</span></label>
+          <textarea id="order-notes" name="notes" rows="2" maxlength="400" placeholder="¿Algo más que debamos saber?"></textarea>
+          <button class="button button-primary whatsapp-button" type="submit"><span aria-hidden="true">☏</span> Pedir por WhatsApp</button>
+          <p class="checkout-note">Se abrirá WhatsApp con tu pedido listo. Recuerda presionar “Enviar” para confirmarlo.</p>
+        </form>
+      </div>
+    </dialog>
+
+    <div class="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>
