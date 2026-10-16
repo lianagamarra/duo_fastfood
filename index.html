@@ -7,7 +7,7 @@
       name="description"
       content="Explora el menú de DUO FAST FOOD. Elige tus pizzas, picadas, chuzos y bebidas, y envía tu pedido por WhatsApp."
     />
-    <meta name="theme-color" content="#171512" />
+    <meta name="theme-color" content="#08090b" />
     <title>DUO FAST FOOD | Menú digital</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -15,13 +15,17 @@
       href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Oswald:wght@500;600;700&display=swap"
       rel="stylesheet"
     />
+    <script>
+      const savedTheme = localStorage.getItem("duofast-theme");
+      document.documentElement.dataset.theme = savedTheme === "light" ? "light" : "dark";
+    </script>
     <link rel="stylesheet" href="styles.css" />
     <script src="app.js" defer></script>
   </head>
   <body>
     <header class="site-header">
       <a class="brand" href="#inicio" aria-label="DUO FAST FOOD, ir al inicio">
-        <span class="brand-mark" aria-hidden="true"><span></span><span></span></span>
+        <span class="brand-mark" aria-hidden="true"><img src="assets/duo-fast-food-mascots.png" alt="" /></span>
         <span class="brand-name">DUO <b>FAST FOOD</b></span>
       </a>
       <nav class="desktop-nav" aria-label="Categorías del menú">
@@ -31,11 +35,16 @@
         <a href="#domingo">Especiales</a>
         <a href="#bebidas">Bebidas</a>
       </nav>
-      <button class="header-cart" type="button" data-open-cart aria-label="Abrir carrito">
-        <span class="cart-icon" aria-hidden="true">🛒</span>
-        <span>Mi pedido</span>
-        <span class="cart-count" data-cart-count>0</span>
-      </button>
+      <div class="header-actions">
+        <button class="theme-toggle" type="button" data-theme-toggle aria-label="Cambiar a modo claro" title="Cambiar a modo claro">
+          <span aria-hidden="true" data-theme-icon>☀</span>
+        </button>
+        <button class="header-cart" type="button" data-open-cart aria-label="Abrir carrito">
+          <span class="cart-icon" aria-hidden="true">🛒</span>
+          <span>Mi pedido</span>
+          <span class="cart-count" data-cart-count>0</span>
+        </button>
+      </div>
     </header>
 
     <main id="inicio">
@@ -45,18 +54,12 @@
           <h1 id="hero-title">El sabor que<br />alegra tus <em>antojos.</em></h1>
           <p class="hero-copy">Pizza, picadas y mucho más. Arma tu pedido a tu gusto y compártelo por WhatsApp.</p>
           <a class="button button-primary hero-button" href="#pizzas">Explorar el menú <span aria-hidden="true">→</span></a>
-          <div class="hero-note"><span aria-hidden="true">✦</span> Buen sabor, buenos momentos.</div>
         </div>
-        <div class="hero-photo" role="img" aria-label="Pizza recién horneada con queso y pepperoni">
-          <div class="hero-logo-card"><img src="assets/duo-fast-food-logo.png" alt="Logo de DUO FAST FOOD, pizzas y picadas" /></div>
-          <div class="hero-caption"><span>RECIÉN HECHO</span><i></i><span>PARA DISFRUTAR</span></div>
-        </div>
-        <div class="hero-index" aria-hidden="true">01 / BUEN PROVECHO</div>
+        <div class="hero-photo" role="img" aria-label="Pizza recién horneada con queso y pepperoni"></div>
       </section>
 
       <div class="menu-toolbar">
         <div><span class="toolbar-dot"></span> Nuestro menú</div>
-        <span>PRECIOS EN PESOS COLOMBIANOS · COP</span>
       </div>
 
       <nav class="mobile-category-nav" aria-label="Categorías del menú">
@@ -75,12 +78,9 @@
     </main>
 
     <footer class="site-footer">
-      <a class="brand footer-brand" href="#inicio">
-        <span class="brand-mark" aria-hidden="true"><span></span><span></span></span>
-        <span class="brand-name">DUO <b>FAST FOOD</b></span>
-      </a>
-      <p>¡El sabor que alegra tus antojos!</p>
-      <span>© <span data-year></span> DUO FAST FOOD</span>
+      <div class="footer-credits">
+        <span>© <span data-year></span> DUO FAST FOOD</span>
+      </div>
     </footer>
 
     <button class="mobile-cart-bar" type="button" data-open-cart>
@@ -107,6 +107,51 @@
           <div class="cart-total-row"><span>Total del pedido</span><strong data-checkout-total>$0</strong></div>
           <label for="customer-name">Tu nombre <span>*</span></label>
           <input id="customer-name" name="customerName" autocomplete="name" placeholder="¿Cómo te llamas?" required maxlength="60" />
+          <fieldset class="checkout-options">
+            <legend>¿Cómo recibes tu pedido? <span>*</span></legend>
+            <div class="option-cards">
+              <label class="checkout-option">
+                <input type="radio" name="deliveryType" value="Recoger en el local" checked required />
+                <span class="option-icon" aria-hidden="true">🏃</span>
+                <span><strong>Recoger</strong><small>En el local</small></span>
+              </label>
+              <label class="checkout-option">
+                <input type="radio" name="deliveryType" value="Domicilio" required />
+                <span class="option-icon" aria-hidden="true">🛵</span>
+                <span><strong>Domicilio</strong><small>En tu dirección</small></span>
+              </label>
+            </div>
+          </fieldset>
+          <div class="conditional-field" data-address-group hidden>
+            <label for="delivery-address">Dirección del domicilio <span>*</span></label>
+            <textarea id="delivery-address" name="deliveryAddress" rows="2" maxlength="250" placeholder="Calle, carrera, número de casa o apartamento y barrio"></textarea>
+          </div>
+          <fieldset class="checkout-options">
+            <legend>¿Cómo vas a pagar? <span>*</span></legend>
+            <div class="option-cards">
+              <label class="checkout-option">
+                <input type="radio" name="paymentMethod" value="Efectivo" checked required />
+                <span class="option-icon" aria-hidden="true">💵</span>
+                <span><strong>Efectivo</strong><small>Al recibir o recoger</small></span>
+              </label>
+              <label class="checkout-option">
+                <input type="radio" name="paymentMethod" value="Transferencia" required />
+                <span class="option-icon" aria-hidden="true">📲</span>
+                <span><strong>Transferencia</strong><small>Pago digital</small></span>
+              </label>
+            </div>
+          </fieldset>
+          <div class="conditional-field cash-change-field" data-cash-group>
+            <label for="cash-change">¿Necesitas que llevemos cambio?</label>
+            <select id="cash-change" name="cashChange">
+              <option value="No">No, tengo el valor exacto</option>
+              <option value="Sí">Sí, necesito cambio</option>
+            </select>
+            <div class="conditional-field" data-change-amount-group hidden>
+              <label for="cash-amount">¿Con cuánto vas a pagar? <span>*</span></label>
+              <input id="cash-amount" name="cashAmount" type="number" min="1" step="1" inputmode="numeric" placeholder="Ej. 50000" />
+            </div>
+          </div>
           <label for="order-notes">Observaciones <span class="optional">(opcional)</span></label>
           <textarea id="order-notes" name="notes" rows="2" maxlength="400" placeholder="¿Algo más que debamos saber?"></textarea>
           <button class="button button-primary whatsapp-button" type="submit"><span aria-hidden="true">☏</span> Pedir por WhatsApp</button>

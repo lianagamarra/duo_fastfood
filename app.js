@@ -17,20 +17,18 @@ const image = (id, width = 720) =>
 const sections = [
   {
     id: "pizzas",
-    emoji: "🍕",
-    title: "Nuestras pizzas",
+    title: "Pizzas",
     subtitle: "Elige tu tamaño favorito y combina sabores a tu gusto.",
     products: [
-      { id: "pizza-porcion", name: "Pizza por porción", price: 8000, image: image("photo-1579751626657-72bc17010498"), presentation: "Porción", pizzaLimit: 0, hasAddons: true },
-      { id: "pizza-personal", name: "Pizza personal", price: 15000, image: image("photo-1593560708920-61dd98c46a4e"), presentation: "Personal", pizzaLimit: 2, hasAddons: true },
-      { id: "pizza-small", name: "Pizza small", price: 20000, image: image("photo-1571407970349-bc81e7e96d47"), presentation: "Small", pizzaLimit: 2, hasAddons: true },
-      { id: "pizza-medium", name: "Pizza medium", price: 36000, image: image("photo-1579751626657-72bc17010498"), presentation: "Medium", pizzaLimit: 4, hasAddons: true },
-      { id: "pizza-familiar", name: "Pizza familiar", price: 64000, image: image("photo-1571407970349-bc81e7e96d47"), presentation: "Familiar", pizzaLimit: 5, hasAddons: true },
+      { id: "pizza-porcion", name: "Pizza por porción", price: 8000, image: "assets/pizza-porcion.png", presentation: "Porción", pizzaLimit: 0, hasAddons: true },
+      { id: "pizza-personal", name: "Pizza personal", price: 15000, image: "assets/pizza-personal.png", presentation: "Personal", pizzaLimit: 2, hasAddons: true },
+      { id: "pizza-small", name: "Pizza small", price: 20000, image: "assets/pizza-small.png", presentation: "Small", pizzaLimit: 2, hasAddons: true },
+      { id: "pizza-medium", name: "Pizza medium", price: 36000, image: "assets/pizza-medium.png", presentation: "Medium", pizzaLimit: 4, hasAddons: true },
+      { id: "pizza-familiar", name: "Pizza familiar", price: 64000, image: "assets/pizza-familiar.png", presentation: "Familiar", pizzaLimit: 5, hasAddons: true },
     ],
   },
   {
     id: "picadas",
-    emoji: "😋",
     title: "Picadas para compartir",
     subtitle: "Un antojo para disfrutar bocado a bocado.",
     products: [
@@ -41,7 +39,6 @@ const sections = [
   },
   {
     id: "chuzos",
-    emoji: "🍡",
     title: "Chuzos desgranados",
     subtitle: "Escoge tu favorito y dale un toque extra si quieres.",
     products: [
@@ -52,7 +49,6 @@ const sections = [
   },
   {
     id: "domingo",
-    emoji: "🔥",
     title: "Especiales de domingo",
     subtitle: "Sabores especiales, preparados bajo pedido. Disponibles solo los domingos.",
     special: true,
@@ -60,18 +56,17 @@ const sections = [
       {
         id: "chicharron-barril", name: "Chicharrón al barril", price: 20000,
         description: "200 g de chicharrón al barril acompañado de yuca cocida, guacamole, chimichurri y limón.",
-        image: image("photo-1626082927389-6cd097cdc6ec"), presentation: "200 g", hasAddons: true,
+        image: "assets/chicharron-barril.png", presentation: "200 g", hasAddons: true,
       },
       {
         id: "picada-mixta-barril", name: "Picada mixta barril", price: 18000,
         description: "120 g de chicharrón al barril, chorizo artesanal de cerdo, bollo limpio, salsas de la casa, chimichurri y limón.",
-        image: image("photo-1544025162-d76694265947"), presentation: "Porción", hasAddons: true,
+        image: "assets/picada-mixta-barril.png", presentation: "Porción", hasAddons: true,
       },
     ],
   },
   {
     id: "bebidas",
-    emoji: "🥤",
     title: "Bebidas",
     subtitle: "Algo refrescante para acompañar.",
     products: [
@@ -99,8 +94,43 @@ const customizeDialog = document.querySelector(".customize-dialog");
 const customizeContent = document.querySelector(".customize-content");
 const cartItemsRoot = document.querySelector(".cart-items");
 const toast = document.querySelector(".toast");
+const themeToggle = document.querySelector("[data-theme-toggle]");
+const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+const checkoutForm = document.querySelector(".checkout-form");
+const deliveryAddressGroup = checkoutForm.querySelector("[data-address-group]");
+const deliveryAddressInput = checkoutForm.querySelector("#delivery-address");
+const cashGroup = checkoutForm.querySelector("[data-cash-group]");
+const cashChangeInput = checkoutForm.querySelector("#cash-change");
+const changeAmountGroup = checkoutForm.querySelector("[data-change-amount-group]");
+const cashAmountInput = checkoutForm.querySelector("#cash-amount");
 let cart = [];
 let toastTimeout;
+
+function setColorTheme(theme, persist = false) {
+  document.documentElement.dataset.theme = theme;
+  const nextTheme = theme === "dark" ? "claro" : "oscuro";
+  themeToggle.setAttribute("aria-label", `Cambiar a modo ${nextTheme}`);
+  themeToggle.title = `Cambiar a modo ${nextTheme}`;
+  themeToggle.querySelector("[data-theme-icon]").textContent = theme === "dark" ? "☀" : "☾";
+  themeColorMeta.content = theme === "dark" ? "#08090b" : "#ffffff";
+  if (persist) localStorage.setItem("duofast-theme", theme);
+}
+
+function updateCheckoutFields() {
+  const deliveryType = checkoutForm.querySelector('input[name="deliveryType"]:checked').value;
+  const paymentMethod = checkoutForm.querySelector('input[name="paymentMethod"]:checked').value;
+  const needsAddress = deliveryType === "Domicilio";
+  const paysInCash = paymentMethod === "Efectivo";
+  const needsChange = paysInCash && cashChangeInput.value === "Sí";
+
+  deliveryAddressGroup.hidden = !needsAddress;
+  deliveryAddressInput.required = needsAddress;
+  if (!needsAddress) deliveryAddressInput.setCustomValidity("");
+  cashGroup.hidden = !paysInCash;
+  changeAmountGroup.hidden = !needsChange;
+  cashAmountInput.required = needsChange;
+  if (!needsChange) cashAmountInput.setCustomValidity("");
+}
 
 function productCard(product, special = false) {
   return `
@@ -124,7 +154,6 @@ function renderMenu() {
     <section class="menu-section${section.special ? " sunday-section" : ""}" id="${section.id}">
       <div class="section-heading">
         <div class="section-title-wrap">
-          <span class="section-emoji" aria-hidden="true">${section.emoji}</span>
           <div><p class="section-kicker">${section.special ? "UN ANTOJO ESPECIAL" : "HECHO PARA DISFRUTAR"}</p><h2>${section.title}</h2></div>
         </div>
         <p class="section-subtitle">${section.subtitle}</p>
@@ -299,11 +328,17 @@ function updateQuantity(key, amount) {
   renderCart();
 }
 
-function whatsappMessage(customerName, notes) {
+function whatsappMessage(customerName, notes, deliveryType, deliveryAddress, paymentMethod, cashChange, cashAmount) {
   const lines = [
     "¡Hola, DUO FAST FOOD! Quiero realizar el siguiente pedido:",
     "",
     `Nombre: ${customerName}`,
+    `Entrega: ${deliveryType}`,
+    ...(deliveryType === "Domicilio" ? [`Dirección: ${deliveryAddress}`] : []),
+    `Método de pago: ${paymentMethod}`,
+    ...(paymentMethod === "Efectivo"
+      ? [`Cambio: ${cashChange === "Sí" ? `Sí, pagaré con ${money(cashAmount)}` : "No, tengo el valor exacto"}`]
+      : []),
     "",
     ...cart.flatMap((item) => {
       const additions = [
@@ -334,6 +369,13 @@ function showToast(message) {
 renderMenu();
 renderCart();
 document.querySelector("[data-year]").textContent = new Date().getFullYear();
+setColorTheme(document.documentElement.dataset.theme);
+updateCheckoutFields();
+
+themeToggle.addEventListener("click", () => {
+  const nextTheme = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+  setColorTheme(nextTheme, true);
+});
 
 menuRoot.addEventListener("click", (event) => {
   const button = event.target.closest("[data-product-id]");
@@ -355,26 +397,53 @@ document.addEventListener("click", (event) => {
   }
 });
 
-document.querySelector(".checkout-form").addEventListener("submit", (event) => {
+checkoutForm.addEventListener("change", updateCheckoutFields);
+checkoutForm.addEventListener("input", (event) => {
+  event.target.setCustomValidity("");
+});
+
+checkoutForm.addEventListener("submit", (event) => {
   event.preventDefault();
   if (!cart.length) {
     showToast("Agrega al menos un producto antes de continuar");
     return;
   }
-  const customerName = document.querySelector("#customer-name").value.trim();
-  if (!customerName) {
-    const nameInput = document.querySelector("#customer-name");
-    nameInput.setCustomValidity("Escribe tu nombre para continuar.");
-    nameInput.reportValidity();
-    nameInput.focus();
+  updateCheckoutFields();
+  const nameInput = checkoutForm.querySelector("#customer-name");
+  const deliveryType = checkoutForm.querySelector('input[name="deliveryType"]:checked').value;
+  const paymentMethod = checkoutForm.querySelector('input[name="paymentMethod"]:checked').value;
+  const needsChange = paymentMethod === "Efectivo" && cashChangeInput.value === "Sí";
+  const customerName = nameInput.value.trim();
+  const deliveryAddress = deliveryAddressInput.value.trim();
+  const cashAmount = cashAmountInput.valueAsNumber;
+
+  nameInput.setCustomValidity(customerName ? "" : "Escribe tu nombre para continuar.");
+  deliveryAddressInput.setCustomValidity(
+    deliveryType !== "Domicilio" || deliveryAddress ? "" : "Escribe la dirección para el domicilio.",
+  );
+  cashAmountInput.setCustomValidity(
+    !needsChange || (Number.isFinite(cashAmount) && cashAmount > totalPrice())
+      ? ""
+      : `El valor debe ser mayor al total del pedido (${money(totalPrice())}).`,
+  );
+  if (!checkoutForm.reportValidity()) {
     return;
   }
-  document.querySelector("#customer-name").setCustomValidity("");
   if (WHATSAPP_NUMBER === "REEMPLAZA_CON_TU_NUMERO") {
     showToast("Configura el número real de WhatsApp en app.js antes de publicar");
     return;
   }
-  const notes = document.querySelector("#order-notes").value.trim();
-  const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(whatsappMessage(customerName, notes))}`;
+  const notes = checkoutForm.querySelector("#order-notes").value.trim();
+  const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
+    whatsappMessage(
+      customerName,
+      notes,
+      deliveryType,
+      deliveryAddress,
+      paymentMethod,
+      cashChangeInput.value,
+      cashAmount,
+    ),
+  )}`;
   window.open(url, "_blank", "noopener,noreferrer");
 });
