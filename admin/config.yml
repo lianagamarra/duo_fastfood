@@ -1,0 +1,101 @@
+backend:
+  name: git-gateway
+  branch: main
+
+site_url: https://duofastfood.netlify.app
+display_url: https://duofastfood.netlify.app
+locale: es
+logo:
+  src: /assets/duo-fast-food-mascots.png
+  show_in_header: true
+
+media_folder: assets/uploads
+public_folder: /assets/uploads
+
+collections:
+  - name: menu
+    label: Menú
+    files:
+      - name: catalog
+        label: Catálogo
+        file: content/menu.json
+        format: json
+        fields:
+          - label: Sabores de pizza
+            name: pizzaFlavors
+            widget: list
+            field:
+              label: Sabor
+              name: flavor
+              widget: string
+          - label: Adiciones
+            name: addons
+            widget: list
+            fields:
+              - label: Identificador
+                name: id
+                widget: string
+              - label: Nombre
+                name: name
+                widget: string
+              - label: Precio
+                name: price
+                widget: number
+                value_type: int
+                min: 0
+          - label: Categorías
+            name: sections
+            widget: list
+            fields:
+              - label: Identificador (sin espacios; usa guiones)
+                name: id
+                widget: string
+              - label: Nombre en navegación
+                name: navLabel
+                widget: string
+              - label: Título
+                name: title
+                widget: string
+              - label: Descripción de categoría
+                name: subtitle
+                widget: text
+              - label: Categoría especial de domingo
+                name: special
+                widget: boolean
+                default: false
+              - label: Productos
+                name: products
+                widget: list
+                fields:
+                  - label: Identificador (sin espacios; usa guiones)
+                    name: id
+                    widget: string
+                  - label: Nombre
+                    name: name
+                    widget: string
+                  - label: Precio en pesos
+                    name: price
+                    widget: number
+                    value_type: int
+                    min: 0
+                  - label: Descripción
+                    name: description
+                    widget: text
+                    required: false
+                  - label: Foto
+                    name: image
+                    widget: image
+                  - label: Presentación
+                    name: presentation
+                    widget: string
+                  - label: Cantidad máxima de sabores (solo pizzas)
+                    name: pizzaLimit
+                    widget: number
+                    value_type: int
+                    min: 0
+                    required: false
+                  - label: Permitir adiciones
+                    name: hasAddons
+                    widget: boolean
+                    default: false
+                    required: false

@@ -1,0 +1,213 @@
+{
+  "pizzaFlavors": [
+    "Pizza perro",
+    "Jamón con queso",
+    "Hawaiana",
+    "Pollo champiñones",
+    "Costeña",
+    "Pizza-neta",
+    "Pollo-jamón"
+  ],
+  "addons": [
+    {
+      "id": "tocineta",
+      "name": "Tocineta",
+      "price": 2000
+    },
+    {
+      "id": "queso",
+      "name": "Queso gratinado",
+      "price": 3800
+    }
+  ],
+  "sections": [
+    {
+      "id": "pizzas",
+      "navLabel": "Pizzas",
+      "title": "Pizzas",
+      "subtitle": "Elige tu tamaño favorito y combina sabores a tu gusto.",
+      "special": false,
+      "products": [
+        {
+          "id": "pizza-porcion",
+          "name": "Pizza por porción",
+          "price": 8000,
+          "image": "/assets/pizza-porcion.png",
+          "presentation": "Porción",
+          "pizzaLimit": 0
+        },
+        {
+          "id": "pizza-personal",
+          "name": "Pizza personal",
+          "price": 15000,
+          "image": "/assets/pizza-personal.png",
+          "presentation": "Personal",
+          "pizzaLimit": 2
+        },
+        {
+          "id": "pizza-small",
+          "name": "Pizza small",
+          "price": 20000,
+          "image": "/assets/pizza-small.png",
+          "presentation": "Small",
+          "pizzaLimit": 2
+        },
+        {
+          "id": "pizza-medium",
+          "name": "Pizza medium",
+          "price": 36000,
+          "image": "/assets/pizza-medium.png",
+          "presentation": "Medium",
+          "pizzaLimit": 4
+        },
+        {
+          "id": "pizza-familiar",
+          "name": "Pizza familiar",
+          "price": 64000,
+          "image": "/assets/pizza-familiar.png",
+          "presentation": "Familiar",
+          "pizzaLimit": 5
+        }
+      ]
+    },
+    {
+      "id": "picadas",
+      "navLabel": "Picadas",
+      "title": "Picadas para compartir",
+      "subtitle": "Un antojo para disfrutar bocado a bocado.",
+      "special": false,
+      "products": [
+        {
+          "id": "picada-chorizo",
+          "name": "Picada de chorizo artesanal de cerdo",
+          "price": 8000,
+          "image": "/assets/picada-chorizo.png",
+          "presentation": "Porción"
+        },
+        {
+          "id": "picada-chicharron",
+          "name": "Picada de chicharrón frito",
+          "price": 16000,
+          "image": "/assets/picada-chicharron-frito.png",
+          "presentation": "Porción"
+        },
+        {
+          "id": "picada-mixta",
+          "name": "Picada mixta (Chicharrón frito + chorizo artesanal de cerdo)",
+          "price": 16000,
+          "image": "/assets/picada-mixta.png",
+          "presentation": "Porción"
+        }
+      ]
+    },
+    {
+      "id": "chuzos",
+      "navLabel": "Chuzos",
+      "title": "Chuzos desgranados",
+      "subtitle": "Escoge tu favorito y dale un toque extra si quieres.",
+      "special": false,
+      "products": [
+        {
+          "id": "chuzo-pollo",
+          "name": "Chuzo desgranado de pollo",
+          "price": 19000,
+          "image": "/assets/chuzo-desgranado-pollo.png",
+          "presentation": "Porción",
+          "hasAddons": true
+        },
+        {
+          "id": "chuzo-cerdo",
+          "name": "Chuzo desgranado de cerdo",
+          "price": 19000,
+          "image": "/assets/chuzo-desgranado-cerdo.png",
+          "presentation": "Porción",
+          "hasAddons": true
+        },
+        {
+          "id": "chuzo-mixto",
+          "name": "Chuzo desgranado mixto (cerdo y pollo)",
+          "price": 19000,
+          "image": "/assets/chuzo-desgranado-mixto.png",
+          "presentation": "Porción",
+          "hasAddons": true
+        }
+      ]
+    },
+    {
+      "id": "domingo",
+      "navLabel": "Especiales",
+      "title": "Especiales de domingo",
+      "subtitle": "Sabores especiales, preparados bajo pedido. Disponibles solo los domingos.",
+      "special": true,
+      "products": [
+        {
+          "id": "chicharron-barril",
+          "name": "Chicharrón al barril",
+          "price": 20000,
+          "description": "200 g de chicharrón al barril acompañado de yuca cocida, guacamole, chimichurri y limón.",
+          "image": "/assets/chicharron-barril.png",
+          "presentation": "200 g"
+        },
+        {
+          "id": "picada-mixta-barril",
+          "name": "Picada mixta barril",
+          "price": 18000,
+          "description": "120 g de chicharrón al barril, chorizo artesanal de cerdo, bollo limpio, salsas de la casa, chimichurri y limón.",
+          "image": "/assets/picada-mixta-barril.png",
+          "presentation": "Porción"
+        }
+      ]
+    },
+    {
+      "id": "bebidas",
+      "navLabel": "Bebidas",
+      "title": "Bebidas",
+      "subtitle": "Algo refrescante para acompañar.",
+      "special": false,
+      "products": [
+        {
+          "id": "postobon-250",
+          "name": "Gaseosa personal Postobón",
+          "price": 2500,
+          "image": "/assets/postobon-250ml.png",
+          "presentation": "250 ml"
+        },
+        {
+          "id": "agua-manzana-500",
+          "name": "Agua de manzana Postobón",
+          "price": 3000,
+          "image": "/assets/postobon-acqua-manzana.png",
+          "presentation": "500 ml"
+        },
+        {
+          "id": "hit-500",
+          "name": "Jugo HIT Postobón",
+          "price": 4500,
+          "image": "/assets/hit-500ml.png",
+          "presentation": "500 ml"
+        },
+        {
+          "id": "postobon-400",
+          "name": "Gaseosa personal Postobón",
+          "price": 4000,
+          "image": "/assets/postobon-400ml.png",
+          "presentation": "400 ml"
+        },
+        {
+          "id": "postobon-125",
+          "name": "Gaseosa Postobón",
+          "price": 6000,
+          "image": "/assets/postobon-125l.png",
+          "presentation": "1,25 litros"
+        },
+        {
+          "id": "postobon-15",
+          "name": "Gaseosa Postobón",
+          "price": 8000,
+          "image": "/assets/postobon-15-litros.png",
+          "presentation": "1,5 litros"
+        }
+      ]
+    }
+  ]
+}

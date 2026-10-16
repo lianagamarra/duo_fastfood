@@ -1,92 +1,24 @@
 // Reemplaza por el indicativo del país y el número real, usando solo dígitos.
 const WHATSAPP_NUMBER = "573135856433";
 
-const pizzaFlavors = [
-  "Pizza perro",
-  "Jamón con queso",
-  "Hawaiana",
-  "Pollo champiñones",
-  "Costeña",
-  "Pizza-neta",
-  "Pollo-jamón",
-];
-
 const image = (id, width = 720) =>
   `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${width}&q=78`;
 
-const sections = [
-  {
-    id: "pizzas",
-    title: "Pizzas",
-    subtitle: "Elige tu tamaño favorito y combina sabores a tu gusto.",
-    products: [
-      { id: "pizza-porcion", name: "Pizza por porción", price: 8000, image: "assets/pizza-porcion.png", presentation: "Porción", pizzaLimit: 0 },
-      { id: "pizza-personal", name: "Pizza personal", price: 15000, image: "assets/pizza-personal.png", presentation: "Personal", pizzaLimit: 2 },
-      { id: "pizza-small", name: "Pizza small", price: 20000, image: "assets/pizza-small.png", presentation: "Small", pizzaLimit: 2 },
-      { id: "pizza-medium", name: "Pizza medium", price: 36000, image: "assets/pizza-medium.png", presentation: "Medium", pizzaLimit: 4 },
-      { id: "pizza-familiar", name: "Pizza familiar", price: 64000, image: "assets/pizza-familiar.png", presentation: "Familiar", pizzaLimit: 5 },
-    ],
-  },
-  {
-    id: "picadas",
-    title: "Picadas para compartir",
-    subtitle: "Un antojo para disfrutar bocado a bocado.",
-    products: [
-      { id: "picada-chorizo", name: "Picada de chorizo artesanal de cerdo", price: 8000, image: "assets/picada-chorizo.png", presentation: "Porción" },
-      { id: "picada-chicharron", name: "Picada de chicharrón frito", price: 16000, image: "assets/picada-chicharron-frito.png", presentation: "Porción" },
-      { id: "picada-mixta", name: "Picada mixta (Chicharrón frito + chorizo artesanal de cerdo)", price: 16000, image: "assets/picada-mixta.png", presentation: "Porción" },
-    ],
-  },
-  {
-    id: "chuzos",
-    title: "Chuzos desgranados",
-    subtitle: "Escoge tu favorito y dale un toque extra si quieres.",
-    products: [
-      { id: "chuzo-pollo", name: "Chuzo desgranado de pollo", price: 19000, image: "assets/chuzo-desgranado-pollo.png", presentation: "Porción", hasAddons: true },
-      { id: "chuzo-cerdo", name: "Chuzo desgranado de cerdo", price: 19000, image: "assets/chuzo-desgranado-cerdo.png", presentation: "Porción", hasAddons: true },
-      { id: "chuzo-mixto", name: "Chuzo desgranado mixto (cerdo y pollo)", price: 19000, image: "assets/chuzo-desgranado-mixto.png", presentation: "Porción", hasAddons: true },
-    ],
-  },
-  {
-    id: "domingo",
-    title: "Especiales de domingo",
-    subtitle: "Sabores especiales, preparados bajo pedido. Disponibles solo los domingos.",
-    special: true,
-    products: [
-      {
-        id: "chicharron-barril", name: "Chicharrón al barril", price: 20000,
-        description: "200 g de chicharrón al barril acompañado de yuca cocida, guacamole, chimichurri y limón.",
-        image: "assets/chicharron-barril.png", presentation: "200 g",
-      },
-      {
-        id: "picada-mixta-barril", name: "Picada mixta barril", price: 18000,
-        description: "120 g de chicharrón al barril, chorizo artesanal de cerdo, bollo limpio, salsas de la casa, chimichurri y limón.",
-        image: "assets/picada-mixta-barril.png", presentation: "Porción",
-      },
-    ],
-  },
-  {
-    id: "bebidas",
-    title: "Bebidas",
-    subtitle: "Algo refrescante para acompañar.",
-    products: [
-      { id: "postobon-250", name: "Gaseosa personal Postobón", price: 2500, image: "assets/postobon-250ml.png", presentation: "250 ml" },
-      { id: "agua-manzana-500", name: "Agua de manzana Postobón", price: 3000, image: "assets/postobon-acqua-manzana.png", presentation: "500 ml" },
-      { id: "hit-500", name: "Jugo HIT Postobón", price: 4500, image: "assets/hit-500ml.png", presentation: "500 ml" },
-      { id: "postobon-400", name: "Gaseosa personal Postobón", price: 4000, image: "assets/postobon-400ml.png", presentation: "400 ml" },
-      { id: "postobon-125", name: "Gaseosa Postobón", price: 6000, image: "assets/postobon-125l.png", presentation: "1,25 litros" },
-      { id: "postobon-15", name: "Gaseosa Postobón", price: 8000, image: "assets/postobon-15-litros.png", presentation: "1,5 litros" },
-    ],
-  },
-];
-
-const addons = [
-  { id: "tocineta", name: "Tocineta", price: 2000 },
-  { id: "queso", name: "Queso gratinado", price: 3800 },
-];
+let pizzaFlavors = [];
+let sections = [];
+let addons = [];
 
 const money = (amount) =>
   `$${new Intl.NumberFormat("es-CO", { maximumFractionDigits: 0 }).format(amount)} COP`;
+
+const escapeHTML = (value) =>
+  String(value ?? "").replace(/[&<>"']/g, (character) => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;",
+  })[character]);
 
 const menuRoot = document.querySelector("#menu-sections");
 const cartDialog = document.querySelector(".cart-dialog");
@@ -151,13 +83,13 @@ function productCard(product, special = false) {
   return `
     <article class="product-card${special ? " product-card-special" : ""}">
       <div class="product-photo">
-        <img src="${product.image}" alt="${product.name} ${product.presentation}" loading="lazy" decoding="async" />
+        <img src="${escapeHTML(product.image)}" alt="${escapeHTML(product.name)} ${escapeHTML(product.presentation)}" loading="lazy" decoding="async" />
         ${special ? '<span class="availability-tag">✦ Solo domingos · Bajo pedido</span>' : ""}
       </div>
       <div class="product-info">
-        <div class="product-title-row"><h3>${product.name}</h3><span class="product-price">${money(product.price)}</span></div>
-        <p class="product-description">${product.description || product.presentation}</p>
-        <button class="add-button" type="button" data-product-id="${product.id}">
+        <div class="product-title-row"><h3>${escapeHTML(product.name)}</h3><span class="product-price">${money(product.price)}</span></div>
+        <p class="product-description">${escapeHTML(product.description || product.presentation)}</p>
+        <button class="add-button" type="button" data-product-id="${escapeHTML(product.id)}">
           ${product.hasAddons ? "Personalizar" : product.pizzaLimit !== undefined ? "Elegir sabores" : "Agregar"} <span aria-hidden="true">+</span>
         </button>
       </div>
@@ -165,17 +97,78 @@ function productCard(product, special = false) {
 }
 
 function renderMenu() {
+  const categoryLinks = sections.map((section) =>
+    `<a href="#${escapeHTML(section.id)}">${escapeHTML(section.navLabel)}</a>`,
+  ).join("");
+  document.querySelector(".desktop-nav").innerHTML = categoryLinks;
+  document.querySelector(".mobile-category-nav").innerHTML = categoryLinks;
   menuRoot.innerHTML = sections.map((section) => `
-    <section class="menu-section${section.special ? " sunday-section" : ""}" id="${section.id}">
+    <section class="menu-section${section.special ? " sunday-section" : ""}" id="${escapeHTML(section.id)}">
       <div class="section-heading">
         <div class="section-title-wrap">
-          <div><p class="section-kicker">${section.special ? "UN ANTOJO ESPECIAL" : "HECHO PARA DISFRUTAR"}</p><h2>${section.title}</h2></div>
+          <div><p class="section-kicker">${section.special ? "UN ANTOJO ESPECIAL" : "HECHO PARA DISFRUTAR"}</p><h2>${escapeHTML(section.title)}</h2></div>
         </div>
-        <p class="section-subtitle">${section.subtitle}</p>
+        <p class="section-subtitle">${escapeHTML(section.subtitle)}</p>
       </div>
       ${section.special ? '<div class="sunday-notice"><span aria-hidden="true">✳</span><div><strong>Solo domingos · Bajo pedido</strong><p>Estos especiales se preparan únicamente bajo pedido para los domingos.</p></div></div>' : ""}
       <div class="product-grid">${section.products.map((product) => productCard(product, section.special)).join("")}</div>
     </section>`).join("");
+}
+
+function validateCatalog(catalog) {
+  const isObject = (value) => value !== null && typeof value === "object" && !Array.isArray(value);
+  const isText = (value) => typeof value === "string" && value.trim().length > 0;
+  const isId = (value) => typeof value === "string" && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value);
+
+  if (!isObject(catalog) || !Array.isArray(catalog.sections) || !catalog.sections.length) {
+    throw new Error("El archivo del catálogo debe contener al menos una categoría.");
+  }
+  if (
+    !Array.isArray(catalog.pizzaFlavors) || !catalog.pizzaFlavors.length
+    || !catalog.pizzaFlavors.every(isText)
+  ) {
+    throw new Error("La lista de sabores de pizza no es válida.");
+  }
+  const addonIds = new Set();
+  if (!Array.isArray(catalog.addons)) {
+    throw new Error("La lista de adiciones no es válida.");
+  }
+  for (const addon of catalog.addons) {
+    if (
+      !isObject(addon) || !isId(addon.id) || addonIds.has(addon.id)
+      || !isText(addon.name) || !Number.isFinite(addon.price) || addon.price < 0
+    ) {
+      throw new Error("La lista de adiciones no es válida.");
+    }
+    addonIds.add(addon.id);
+  }
+
+  const sectionIds = new Set();
+  const productIds = new Set();
+  for (const section of catalog.sections) {
+    if (
+      !isObject(section) || !isId(section.id) || sectionIds.has(section.id)
+      || !isText(section.navLabel) || !isText(section.title) || !isText(section.subtitle)
+      || typeof section.special !== "boolean" || !Array.isArray(section.products)
+    ) {
+      throw new Error("Hay una categoría incompleta o con un identificador repetido.");
+    }
+    sectionIds.add(section.id);
+    for (const product of section.products) {
+      if (
+        !isObject(product) || !isId(product.id) || productIds.has(product.id)
+        || !isText(product.name) || !Number.isFinite(product.price) || product.price < 0
+        || !isText(product.image) || !/^(?:\/?assets\/|https:\/\/)/.test(product.image)
+        || !isText(product.presentation)
+        || (product.description !== undefined && typeof product.description !== "string")
+        || (product.pizzaLimit !== undefined && (!Number.isInteger(product.pizzaLimit) || product.pizzaLimit < 0))
+        || (product.hasAddons !== undefined && typeof product.hasAddons !== "boolean")
+      ) {
+        throw new Error("Hay un producto incompleto o con un identificador repetido.");
+      }
+      productIds.add(product.id);
+    }
+  }
 }
 
 function findProduct(productId) {
@@ -205,7 +198,7 @@ function openCustomization(product) {
   const flavorOptions = isPizza ? `
     <p class="customize-instruction">${isSlice ? "Si quieres, elige un sabor para tu porción. Pregunta por disponibilidad." : `Elige de 1 a ${product.pizzaLimit} sabores. Puedes elegir uno solo o combinarlos sin costo adicional.`}</p>
     <div class="flavor-options">${pizzaFlavors.map((flavor) => `
-      <label class="choice-option"><input type="checkbox" name="flavor" value="${flavor}" /><span class="choice-check"></span><span>${flavor}</span></label>`).join("")}
+      <label class="choice-option"><input type="checkbox" name="flavor" value="${escapeHTML(flavor)}" /><span class="choice-check"></span><span>${escapeHTML(flavor)}</span></label>`).join("")}
     </div>
     <p class="selection-count" data-selection-count>0 de ${isSlice ? "1 opcional" : product.pizzaLimit} sabores elegidos</p>
   ` : "";
@@ -214,14 +207,14 @@ function openCustomization(product) {
       <p class="addon-heading">${isPizza ? "Agrega toppings" : "Adiciones opcionales"}</p>
       <p class="customize-instruction">Elige los extras que quieras. Se suman al precio del producto.</p>
       <div class="flavor-options">${addons.map((addon) => `
-        <label class="choice-option addon-choice"><input type="checkbox" name="addon" value="${addon.id}" /><span class="choice-check"></span><span>${addon.name}</span><strong>+ ${money(addon.price)}</strong></label>`).join("")}
+        <label class="choice-option addon-choice"><input type="checkbox" name="addon" value="${escapeHTML(addon.id)}" /><span class="choice-check"></span><span>${escapeHTML(addon.name)}</span><strong>+ ${money(addon.price)}</strong></label>`).join("")}
       </div>
     </div>
   ` : "";
   customizeContent.innerHTML = `
     <p class="eyebrow">${isPizza ? "ARMA TU PIZZA" : "A TU GUSTO"}</p>
-    <h2 id="customize-title">${product.name}</h2>
-    <p class="customize-price">${money(product.price)} <span>· ${product.presentation}</span></p>
+    <h2 id="customize-title">${escapeHTML(product.name)}</h2>
+    <p class="customize-price">${money(product.price)} <span>· ${escapeHTML(product.presentation)}</span></p>
     ${flavorOptions}
     ${addonOptions}
     ${isPizza ? `
@@ -319,19 +312,19 @@ function renderCart() {
 
   cartItemsRoot.innerHTML = cart.map((item) => {
     const details = [
-      item.product.presentation,
-      ...(item.flavors.length ? [`Sabores: ${item.flavors.join(", ")}`] : []),
-      ...(item.addons.length ? [`Adiciones: ${item.addons.map((addon) => `${addon.name} (+${money(addon.price)})`).join(", ")}`] : []),
+        escapeHTML(item.product.presentation),
+        ...(item.flavors.length ? [`Sabores: ${item.flavors.map(escapeHTML).join(", ")}`] : []),
+        ...(item.addons.length ? [`Adiciones: ${item.addons.map((addon) => `${escapeHTML(addon.name)} (+${money(addon.price)})`).join(", ")}`] : []),
     ];
     return `
       <article class="cart-item">
-        <div class="cart-item-main"><div><h3>${item.product.name}</h3><p>${details.join(" · ")}</p>
+          <div class="cart-item-main"><div><h3>${escapeHTML(item.product.name)}</h3><p>${details.join(" · ")}</p>
           <span class="cart-item-price">${money(unitPrice(item))} c/u</span></div>
-          <button class="remove-item" type="button" data-remove="${item.key}" aria-label="Eliminar ${item.product.name}">×</button></div>
+            <button class="remove-item" type="button" data-remove="${escapeHTML(item.key)}" aria-label="Eliminar ${escapeHTML(item.product.name)}">×</button></div>
         <div class="cart-item-bottom"><div class="quantity-control">
-          <button type="button" data-quantity="-1" data-key="${item.key}" aria-label="Disminuir cantidad">−</button>
+            <button type="button" data-quantity="-1" data-key="${escapeHTML(item.key)}" aria-label="Disminuir cantidad">−</button>
           <span>${item.quantity}</span>
-          <button type="button" data-quantity="1" data-key="${item.key}" aria-label="Aumentar cantidad">+</button>
+            <button type="button" data-quantity="1" data-key="${escapeHTML(item.key)}" aria-label="Aumentar cantidad">+</button>
         </div><strong>${money(unitPrice(item) * item.quantity)}</strong></div>
       </article>`;
   }).join("");
@@ -383,8 +376,6 @@ function showToast(message) {
   toastTimeout = setTimeout(() => toast.classList.remove("toast-visible"), 2400);
 }
 
-renderMenu();
-renderCart();
 document.querySelector("[data-year]").textContent = new Date().getFullYear();
 setColorTheme(document.documentElement.dataset.theme);
 updateCheckoutFields();
@@ -470,3 +461,27 @@ checkoutForm.addEventListener("submit", (event) => {
   )}`;
   window.open(url, "_blank", "noopener,noreferrer");
 });
+
+async function initializeMenu() {
+  try {
+    const response = await fetch("content/menu.json", { cache: "no-store" });
+    if (!response.ok) throw new Error(`No se pudo cargar el catálogo (${response.status}).`);
+    const catalog = await response.json();
+    validateCatalog(catalog);
+    sections = catalog.sections;
+    pizzaFlavors = catalog.pizzaFlavors;
+    addons = catalog.addons;
+    renderMenu();
+    renderCart();
+  } catch (error) {
+    menuRoot.innerHTML = `
+      <div class="menu-load-error" role="alert">
+        <h2>No pudimos cargar el menú</h2>
+        <p>Intenta de nuevo más tarde o visita el sitio publicado. Si abriste el archivo directamente, necesitas usar un servidor local para cargar los productos.</p>
+      </div>`;
+    console.error("No fue posible inicializar el menú.", error);
+  }
+}
+
+renderCart();
+initializeMenu();
