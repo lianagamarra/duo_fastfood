@@ -93,6 +93,7 @@ const cartDialog = document.querySelector(".cart-dialog");
 const customizeDialog = document.querySelector(".customize-dialog");
 const customizeContent = document.querySelector(".customize-content");
 const cartItemsRoot = document.querySelector(".cart-items");
+const mobileCartBar = document.querySelector(".mobile-cart-bar");
 const toast = document.querySelector(".toast");
 const themeToggle = document.querySelector("[data-theme-toggle]");
 const themeColorMeta = document.querySelector('meta[name="theme-color"]');
@@ -286,6 +287,7 @@ function totalPrice() {
 }
 
 function renderCart() {
+  mobileCartBar.hidden = cart.length === 0;
   document.querySelectorAll("[data-cart-count]").forEach((element) => {
     element.textContent = totalItems();
   });
@@ -371,6 +373,11 @@ renderCart();
 document.querySelector("[data-year]").textContent = new Date().getFullYear();
 setColorTheme(document.documentElement.dataset.theme);
 updateCheckoutFields();
+
+const footerObserver = new IntersectionObserver(([entry]) => {
+  mobileCartBar.classList.toggle("is-footer-visible", entry.isIntersecting);
+}, { rootMargin: "0px 0px 80px 0px" });
+footerObserver.observe(document.querySelector(".site-footer"));
 
 themeToggle.addEventListener("click", () => {
   const nextTheme = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
