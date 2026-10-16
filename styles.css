@@ -265,9 +265,10 @@ dialog::backdrop { background: rgba(25,22,19,.62); backdrop-filter: blur(3px); }
   .hero-photo { background-image: linear-gradient(90deg, rgba(17,17,17,.93), rgba(17,17,17,.38)), linear-gradient(0deg, rgba(17,17,17,.5), transparent 60%), url("assets/hero-pizzas.png"); background-position: center, center, center bottom; background-size: cover, cover, 100% auto; }
   .menu-toolbar { height: 47px; padding: 0 18px; }
   .menu-toolbar > div { font-size: 11px; }
-  .mobile-category-nav { position: sticky; z-index: 8; top: 64px; display: flex; gap: 8px; overflow-x: auto; padding: 11px 16px; border-bottom: 1px solid var(--line); background: var(--header-background); scrollbar-width: none; }
+  .mobile-category-nav { position: sticky; z-index: 8; top: 64px; display: flex; gap: 9px; overflow-x: auto; padding: 12px 16px; border-bottom: 1px solid var(--line); background: var(--header-background); scrollbar-width: none; scroll-snap-type: x proximity; }
   .mobile-category-nav::-webkit-scrollbar { display: none; }
-  .mobile-category-nav a { flex: 0 0 auto; padding: 8px 11px; border: 1px solid var(--line); border-radius: 22px; color: var(--ink); background: var(--surface); font-size: 10px; font-weight: 700; }
+  .mobile-category-nav a { flex: 0 0 auto; padding: 9px 15px; border: 1px solid var(--line); border-radius: 22px; color: var(--text-secondary); background: var(--surface); font-size: 11px; font-weight: 700; letter-spacing: .01em; scroll-snap-align: start; transition: color .18s ease, border-color .18s ease, background .18s ease; }
+  .mobile-category-nav a:hover, .mobile-category-nav a:focus-visible { border-color: var(--orange); color: #fff; background: var(--orange); }
   .menu-sections { padding: 0 16px; }
   .menu-section { padding: 43px 0 45px; scroll-margin-top: 122px; }
   .section-heading { align-items: flex-start; flex-direction: column; gap: 10px; margin-bottom: 18px; }

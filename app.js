@@ -20,11 +20,11 @@ const sections = [
     title: "Pizzas",
     subtitle: "Elige tu tamaño favorito y combina sabores a tu gusto.",
     products: [
-      { id: "pizza-porcion", name: "Pizza por porción", price: 8000, image: "assets/pizza-porcion.png", presentation: "Porción", pizzaLimit: 0, hasAddons: true },
-      { id: "pizza-personal", name: "Pizza personal", price: 15000, image: "assets/pizza-personal.png", presentation: "Personal", pizzaLimit: 2, hasAddons: true },
-      { id: "pizza-small", name: "Pizza small", price: 20000, image: "assets/pizza-small.png", presentation: "Small", pizzaLimit: 2, hasAddons: true },
-      { id: "pizza-medium", name: "Pizza medium", price: 36000, image: "assets/pizza-medium.png", presentation: "Medium", pizzaLimit: 4, hasAddons: true },
-      { id: "pizza-familiar", name: "Pizza familiar", price: 64000, image: "assets/pizza-familiar.png", presentation: "Familiar", pizzaLimit: 5, hasAddons: true },
+      { id: "pizza-porcion", name: "Pizza por porción", price: 8000, image: "assets/pizza-porcion.png", presentation: "Porción", pizzaLimit: 0 },
+      { id: "pizza-personal", name: "Pizza personal", price: 15000, image: "assets/pizza-personal.png", presentation: "Personal", pizzaLimit: 2 },
+      { id: "pizza-small", name: "Pizza small", price: 20000, image: "assets/pizza-small.png", presentation: "Small", pizzaLimit: 2 },
+      { id: "pizza-medium", name: "Pizza medium", price: 36000, image: "assets/pizza-medium.png", presentation: "Medium", pizzaLimit: 4 },
+      { id: "pizza-familiar", name: "Pizza familiar", price: 64000, image: "assets/pizza-familiar.png", presentation: "Familiar", pizzaLimit: 5 },
     ],
   },
   {
@@ -32,9 +32,9 @@ const sections = [
     title: "Picadas para compartir",
     subtitle: "Un antojo para disfrutar bocado a bocado.",
     products: [
-      { id: "picada-chorizo", name: "Picada de chorizo artesanal de cerdo", price: 8000, image: "assets/picada-chorizo.png", presentation: "Porción", hasAddons: true },
-      { id: "picada-chicharron", name: "Picada de chicharrón frito", price: 16000, image: "assets/picada-chicharron-frito.png", presentation: "Porción", hasAddons: true },
-      { id: "picada-mixta", name: "Picada mixta", price: 16000, image: "assets/picada-mixta.png", presentation: "Porción", hasAddons: true },
+      { id: "picada-chorizo", name: "Picada de chorizo artesanal de cerdo", price: 8000, image: "assets/picada-chorizo.png", presentation: "Porción" },
+      { id: "picada-chicharron", name: "Picada de chicharrón frito", price: 16000, image: "assets/picada-chicharron-frito.png", presentation: "Porción" },
+      { id: "picada-mixta", name: "Picada mixta (Chicharrón frito + chorizo artesanal de cerdo)", price: 16000, image: "assets/picada-mixta.png", presentation: "Porción" },
     ],
   },
   {
@@ -44,7 +44,7 @@ const sections = [
     products: [
       { id: "chuzo-pollo", name: "Chuzo desgranado de pollo", price: 19000, image: "assets/chuzo-desgranado-pollo.png", presentation: "Porción", hasAddons: true },
       { id: "chuzo-cerdo", name: "Chuzo desgranado de cerdo", price: 19000, image: "assets/chuzo-desgranado-cerdo.png", presentation: "Porción", hasAddons: true },
-      { id: "chuzo-mixto", name: "Chuzo desgranado mixto", price: 19000, image: "assets/chuzo-desgranado-mixto.png", presentation: "Porción", hasAddons: true },
+      { id: "chuzo-mixto", name: "Chuzo desgranado mixto (cerdo y pollo)", price: 19000, image: "assets/chuzo-desgranado-mixto.png", presentation: "Porción", hasAddons: true },
     ],
   },
   {
@@ -56,12 +56,12 @@ const sections = [
       {
         id: "chicharron-barril", name: "Chicharrón al barril", price: 20000,
         description: "200 g de chicharrón al barril acompañado de yuca cocida, guacamole, chimichurri y limón.",
-        image: "assets/chicharron-barril.png", presentation: "200 g", hasAddons: true,
+        image: "assets/chicharron-barril.png", presentation: "200 g",
       },
       {
         id: "picada-mixta-barril", name: "Picada mixta barril", price: 18000,
         description: "120 g de chicharrón al barril, chorizo artesanal de cerdo, bollo limpio, salsas de la casa, chimichurri y limón.",
-        image: "assets/picada-mixta-barril.png", presentation: "Porción", hasAddons: true,
+        image: "assets/picada-mixta-barril.png", presentation: "Porción",
       },
     ],
   },
@@ -188,7 +188,7 @@ function openCustomization(product) {
   const isPizza = product.pizzaLimit !== undefined;
   const isSlice = isPizza && product.pizzaLimit === 0;
   const flavorOptions = isPizza ? `
-    <p class="customize-instruction">${isSlice ? "Si quieres, elige un sabor para tu porción. Combinar sabores no tiene costo adicional." : `Elige de 1 a ${product.pizzaLimit} sabores. Puedes elegir uno solo o combinarlos sin costo adicional.`}</p>
+    <p class="customize-instruction">${isSlice ? "Si quieres, elige un sabor para tu porción. Pregunta por disponibilidad." : `Elige de 1 a ${product.pizzaLimit} sabores. Puedes elegir uno solo o combinarlos sin costo adicional.`}</p>
     <div class="flavor-options">${pizzaFlavors.map((flavor) => `
       <label class="choice-option"><input type="checkbox" name="flavor" value="${flavor}" /><span class="choice-check"></span><span>${flavor}</span></label>`).join("")}
     </div>
