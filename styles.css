@@ -201,7 +201,7 @@ dialog::backdrop { background: rgba(25,22,19,.62); backdrop-filter: blur(3px); }
 .quantity-control button { display: grid; width: 28px; height: 28px; place-items: center; border: 1px solid var(--line); border-radius: 5px; color: var(--ink); background: var(--surface); font-size: 17px; cursor: pointer; }
 .quantity-control span { min-width: 12px; text-align: center; font-size: 12px; font-weight: 800; }
 .checkout-form { flex: 0 1 auto; overflow-y: auto; padding: 14px 24px 20px; border-top: 1px solid var(--line); background: var(--surface); }
-.cart-total-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; }
+.cart-total-row { position: sticky; z-index: 2; top: 0; display: flex; align-items: center; justify-content: space-between; margin: -14px 0 15px; padding: 12px 0; border-bottom: 1px solid var(--line); background: var(--surface); }
 .cart-total-row span { color: var(--muted); font-size: 12px; }
 .cart-total-row strong { color: var(--accent); font-family: var(--font-display); font-size: 25px; }
 .checkout-form label { display: block; margin: 11px 0 6px; font-size: 11px; font-weight: 800; }
@@ -226,6 +226,8 @@ dialog::backdrop { background: rgba(25,22,19,.62); backdrop-filter: blur(3px); }
 .conditional-field > label { margin-top: 13px; }
 .cash-change-field > label { margin-top: 13px; }
 .cash-change-field select { color: var(--ink); }
+.change-summary { margin: 7px 0 0; color: var(--accent); font-size: 12px; font-weight: 700; line-height: 1.5; }
+.change-summary[hidden] { display: none; }
 .whatsapp-button { width: 100%; margin-top: 15px; font-size: 13px; }
 .whatsapp-button > span { font-size: 20px; }
 .checkout-note { margin: 9px 0 0; color: var(--muted); font-size: 9px; line-height: 1.5; text-align: center; }

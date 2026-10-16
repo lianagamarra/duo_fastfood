@@ -104,6 +104,7 @@ const cashGroup = checkoutForm.querySelector("[data-cash-group]");
 const cashChangeInput = checkoutForm.querySelector("#cash-change");
 const changeAmountGroup = checkoutForm.querySelector("[data-change-amount-group]");
 const cashAmountInput = checkoutForm.querySelector("#cash-amount");
+const changeSummary = checkoutForm.querySelector("[data-change-summary]");
 let cart = [];
 let toastTimeout;
 
@@ -131,6 +132,19 @@ function updateCheckoutFields() {
   changeAmountGroup.hidden = !needsChange;
   cashAmountInput.required = needsChange;
   if (!needsChange) cashAmountInput.setCustomValidity("");
+  updateChangeSummary();
+}
+
+function updateChangeSummary() {
+  const amountPaid = cashAmountInput.valueAsNumber;
+  const total = totalPrice();
+  const isValidPayment = Number.isFinite(amountPaid) && amountPaid > total;
+  const needsChange = !cashGroup.hidden && cashChangeInput.value === "Sí";
+
+  changeSummary.hidden = !needsChange;
+  changeSummary.textContent = isValidPayment
+    ? `Tu cambio será ${money(amountPaid - total)}.`
+    : `El total es ${money(total)}. Ingresa un valor mayor para calcular el cambio.`;
 }
 
 function productCard(product, special = false) {
@@ -294,6 +308,7 @@ function renderCart() {
   document.querySelectorAll("[data-cart-total], [data-checkout-total]").forEach((element) => {
     element.textContent = money(totalPrice());
   });
+  updateChangeSummary();
 
   if (cart.length === 0) {
     cartItemsRoot.innerHTML = `
@@ -339,7 +354,7 @@ function whatsappMessage(customerName, notes, deliveryType, deliveryAddress, pay
     ...(deliveryType === "Domicilio" ? [`Dirección: ${deliveryAddress}`] : []),
     `Método de pago: ${paymentMethod}`,
     ...(paymentMethod === "Efectivo"
-      ? [`Cambio: ${cashChange === "Sí" ? `Sí, pagaré con ${money(cashAmount)}` : "No, tengo el valor exacto"}`]
+      ? [`Cambio: ${cashChange === "Sí" ? `Sí, pagaré con ${money(cashAmount)}. Devolver ${money(cashAmount - totalPrice())}` : "No, tengo el valor exacto"}`]
       : []),
     "",
     ...cart.flatMap((item) => {
@@ -407,6 +422,7 @@ document.addEventListener("click", (event) => {
 checkoutForm.addEventListener("change", updateCheckoutFields);
 checkoutForm.addEventListener("input", (event) => {
   event.target.setCustomValidity("");
+  if (event.target === cashAmountInput) updateChangeSummary();
 });
 
 checkoutForm.addEventListener("submit", (event) => {
