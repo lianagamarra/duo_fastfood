@@ -102,11 +102,13 @@
       <div class="cart-panel">
         <div class="cart-heading">
           <div><p class="eyebrow">TU PEDIDO</p><h2 id="cart-title">El carrito <span aria-hidden="true">🛒</span></h2></div>
-          <button class="icon-button" type="button" data-close-cart aria-label="Cerrar carrito">×</button>
+          <div class="cart-heading-actions">
+            <strong class="cart-heading-total" data-checkout-total>$0 COP</strong>
+            <button class="icon-button" type="button" data-close-cart aria-label="Cerrar carrito">×</button>
+          </div>
         </div>
         <div class="cart-items"></div>
         <form class="checkout-form" novalidate>
-          <div class="cart-total-row"><span>Total del pedido</span><strong data-checkout-total>$0</strong></div>
           <label for="customer-name">Tu nombre <span>*</span></label>
           <input id="customer-name" name="customerName" autocomplete="name" placeholder="¿Cómo te llamas?" required maxlength="60" />
           <fieldset class="checkout-options">
