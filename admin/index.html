@@ -32,9 +32,19 @@
       .login-card .brand { justify-content: center; margin-bottom: 24px; }
       .login-card h2 { margin-bottom: 7px; font-size: 27px; }
       .login-card p { margin-bottom: 25px; color: var(--muted); font-size: 13px; line-height: 1.55; }
+      .field { display: grid; gap: 8px; margin: 15px 0; text-align: left; }
+      .field label { font-size: 12px; font-weight: 700; }
+      .field input { width: 100%; height: 46px; padding: 0 13px; border: 1px solid #41444b; border-radius: 7px; color: #f4f4f5; background: var(--raised); }
+      .field input:focus { border-color: var(--orange); outline: 2px solid #f28c2840; }
       .button { min-height: 46px; padding: 0 17px; border: 0; border-radius: 7px; background: var(--red); font-size: 13px; font-weight: 800; }
       .button:hover { background: #bd151c; }
       .button-wide { width: 100%; }
+      .button:disabled { cursor: wait; opacity: .7; }
+      .login-error { margin: 14px 0 0 !important; color: #ff9b9b !important; }
+      .login-error[hidden] { display: none; }
+      .login-error.success { color: #9be1ad !important; }
+      .recovery { margin: 16px 0 0 !important; }
+      .recovery button { padding: 0; border: 0; color: #ffd29d; background: none; font-size: 12px; text-decoration: underline; }
       .link { display: inline-flex; align-items: center; justify-content: center; min-height: 42px; padding: 0 13px; border: 1px solid var(--line); border-radius: 7px; color: #f4f4f5; background: var(--raised); font-size: 12px; font-weight: 700; text-decoration: none; }
       .link:hover { border-color: var(--orange); }
       .dashboard { overflow: hidden; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
@@ -98,8 +108,14 @@
         <div class="login-card">
           <div class="brand"><img src="/assets/duo-fast-food-mascots.png" alt="" /><span class="brand-name">DUO <b>FAST FOOD</b></span></div>
           <h2>Bienvenida</h2>
-          <p>Inicia sesión con la cuenta que recibió la invitación para administrar este sitio.</p>
-          <button class="button button-wide" type="button" data-login-button>Iniciar sesión</button>
+          <p>Ingresa con el correo y la contraseña de tu cuenta invitada.</p>
+          <form data-login-form>
+            <div class="field"><label for="admin-email">Correo electrónico</label><input id="admin-email" name="email" type="email" autocomplete="username" required /></div>
+            <div class="field"><label for="admin-password">Contraseña</label><input id="admin-password" name="password" type="password" autocomplete="current-password" required /></div>
+            <button class="button button-wide" type="submit" data-login-button>Iniciar sesión</button>
+            <p class="login-error" data-login-error role="alert" hidden></p>
+          </form>
+          <p class="recovery"><button type="button" data-recover>¿Olvidaste tu contraseña?</button></p>
           <p class="footer">El acceso es privado y solo está disponible para cuentas invitadas.</p>
         </div>
       </section>
@@ -202,8 +218,56 @@
         return `$${new Intl.NumberFormat("es-CO").format(price)} COP`;
       }
 
-      document.querySelector("[data-login-button]").addEventListener("click", () => {
-        if (window.netlifyIdentity) window.netlifyIdentity.open("login");
+      const loginForm = document.querySelector("[data-login-form]");
+      const loginError = document.querySelector("[data-login-error]");
+
+      loginForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        if (!window.netlifyIdentity?.gotrue) {
+          loginError.textContent = "No se pudo conectar con el servicio de inicio de sesión. Recarga la página e intenta de nuevo.";
+          loginError.hidden = false;
+          return;
+        }
+        const submitButton = document.querySelector("[data-login-button]");
+        submitButton.disabled = true;
+        submitButton.textContent = "Verificando…";
+        loginError.hidden = true;
+        try {
+          const email = loginForm.elements.email.value.trim();
+          const password = loginForm.elements.password.value;
+          const response = await window.netlifyIdentity.gotrue.login(email, password, true);
+          const user = response?.user || response;
+          if (!user?.email) throw new Error("La respuesta de Identity no contiene un usuario válido.");
+          showDashboard(user);
+        } catch (error) {
+          console.error("No se pudo iniciar sesión con Netlify Identity.", error);
+          loginError.textContent = "No se pudo iniciar sesión. Verifica el correo, la contraseña y que hayas aceptado la invitación.";
+          loginError.hidden = false;
+        } finally {
+          submitButton.disabled = false;
+          submitButton.textContent = "Iniciar sesión";
+        }
+      });
+
+      document.querySelector("[data-recover]").addEventListener("click", async () => {
+        const email = loginForm.elements.email.value.trim();
+        if (!email) {
+          loginForm.elements.email.focus();
+          loginError.textContent = "Escribe tu correo para enviarte el enlace de recuperación.";
+          loginError.hidden = false;
+          return;
+        }
+        try {
+          await window.netlifyIdentity.gotrue.requestPasswordRecovery(email);
+          loginError.textContent = "Si existe una cuenta para ese correo, recibirás un enlace para restablecer la contraseña.";
+          loginError.hidden = false;
+          loginError.classList.add("success");
+        } catch (error) {
+          console.error("No se pudo solicitar la recuperación de contraseña.", error);
+          loginError.textContent = "No se pudo enviar el correo de recuperación. Intenta de nuevo más tarde.";
+          loginError.hidden = false;
+          loginError.classList.remove("success");
+        }
       });
       document.querySelector("[data-logout]").addEventListener("click", () => window.netlifyIdentity?.logout());
       document.querySelector(".side-nav").addEventListener("click", (event) => {
