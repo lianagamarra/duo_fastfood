@@ -8,18 +8,6 @@
     "Pizza-neta",
     "Pollo-jamón"
   ],
-  "addons": [
-    {
-      "id": "tocineta",
-      "name": "Tocineta",
-      "price": 2000
-    },
-    {
-      "id": "queso",
-      "name": "Queso gratinado",
-      "price": 3800
-    }
-  ],
   "sections": [
     {
       "id": "pizzas",
@@ -34,7 +22,20 @@
           "price": 8000,
           "image": "/assets/pizza-porcion.png",
           "presentation": "Porción",
-          "pizzaLimit": 0
+          "pizzaLimit": 0,
+          "hasAddons": true,
+          "addons": [
+            {
+              "id": "tocineta",
+              "name": "Tocineta",
+              "price": 2000
+            },
+            {
+              "id": "queso",
+              "name": "Queso gratinado",
+              "price": 3800
+            }
+          ]
         },
         {
           "id": "pizza-personal",
@@ -42,7 +43,20 @@
           "price": 15000,
           "image": "/assets/pizza-personal.png",
           "presentation": "Personal",
-          "pizzaLimit": 2
+          "pizzaLimit": 2,
+          "hasAddons": true,
+          "addons": [
+            {
+              "id": "tocineta",
+              "name": "Tocineta",
+              "price": 2000
+            },
+            {
+              "id": "queso",
+              "name": "Queso gratinado",
+              "price": 3800
+            }
+          ]
         },
         {
           "id": "pizza-small",
@@ -50,7 +64,20 @@
           "price": 20000,
           "image": "/assets/pizza-small.png",
           "presentation": "Small",
-          "pizzaLimit": 2
+          "pizzaLimit": 2,
+          "hasAddons": true,
+          "addons": [
+            {
+              "id": "tocineta",
+              "name": "Tocineta",
+              "price": 2000
+            },
+            {
+              "id": "queso",
+              "name": "Queso gratinado",
+              "price": 3800
+            }
+          ]
         },
         {
           "id": "pizza-medium",
@@ -58,7 +85,20 @@
           "price": 36000,
           "image": "/assets/pizza-medium.png",
           "presentation": "Medium",
-          "pizzaLimit": 4
+          "pizzaLimit": 4,
+          "hasAddons": true,
+          "addons": [
+            {
+              "id": "tocineta",
+              "name": "Tocineta",
+              "price": 2000
+            },
+            {
+              "id": "queso",
+              "name": "Queso gratinado",
+              "price": 3800
+            }
+          ]
         },
         {
           "id": "pizza-familiar",
@@ -66,7 +106,20 @@
           "price": 64000,
           "image": "/assets/pizza-familiar.png",
           "presentation": "Familiar",
-          "pizzaLimit": 5
+          "pizzaLimit": 5,
+          "hasAddons": true,
+          "addons": [
+            {
+              "id": "tocineta",
+              "name": "Tocineta",
+              "price": 2000
+            },
+            {
+              "id": "queso",
+              "name": "Queso gratinado",
+              "price": 3800
+            }
+          ]
         }
       ]
     },
@@ -113,7 +166,19 @@
           "price": 19000,
           "image": "/assets/chuzo-desgranado-pollo.png",
           "presentation": "Porción",
-          "hasAddons": true
+          "hasAddons": true,
+          "addons": [
+            {
+              "id": "tocineta",
+              "name": "Tocineta",
+              "price": 2000
+            },
+            {
+              "id": "queso",
+              "name": "Queso gratinado",
+              "price": 3800
+            }
+          ]
         },
         {
           "id": "chuzo-cerdo",
@@ -121,7 +186,19 @@
           "price": 19000,
           "image": "/assets/chuzo-desgranado-cerdo.png",
           "presentation": "Porción",
-          "hasAddons": true
+          "hasAddons": true,
+          "addons": [
+            {
+              "id": "tocineta",
+              "name": "Tocineta",
+              "price": 2000
+            },
+            {
+              "id": "queso",
+              "name": "Queso gratinado",
+              "price": 3800
+            }
+          ]
         },
         {
           "id": "chuzo-mixto",
@@ -129,7 +206,19 @@
           "price": 19000,
           "image": "/assets/chuzo-desgranado-mixto.png",
           "presentation": "Porción",
-          "hasAddons": true
+          "hasAddons": true,
+          "addons": [
+            {
+              "id": "tocineta",
+              "name": "Tocineta",
+              "price": 2000
+            },
+            {
+              "id": "queso",
+              "name": "Queso gratinado",
+              "price": 3800
+            }
+          ]
         }
       ]
     },

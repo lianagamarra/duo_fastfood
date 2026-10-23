@@ -28,21 +28,6 @@ collections:
               label: Sabor
               name: flavor
               widget: string
-          - label: Adiciones
-            name: addons
-            widget: list
-            fields:
-              - label: Identificador
-                name: id
-                widget: string
-              - label: Nombre
-                name: name
-                widget: string
-              - label: Precio
-                name: price
-                widget: number
-                value_type: int
-                min: 0
           - label: Categorías
             name: sections
             widget: list
@@ -94,8 +79,25 @@ collections:
                     value_type: int
                     min: 0
                     required: false
-                  - label: Permitir adiciones
+                  - label: Permitir toppings y adiciones
                     name: hasAddons
                     widget: boolean
                     default: false
                     required: false
+                    hint: Activa los toppings que configures en este producto.
+                  - label: Toppings y adiciones de este producto
+                    name: addons
+                    widget: list
+                    required: false
+                    fields:
+                      - label: Identificador (sin espacios; usa guiones)
+                        name: id
+                        widget: string
+                      - label: Nombre
+                        name: name
+                        widget: string
+                      - label: Precio adicional
+                        name: price
+                        widget: number
+                        value_type: int
+                        min: 0

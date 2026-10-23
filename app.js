@@ -6,7 +6,6 @@ const image = (id, width = 720) =>
 
 let pizzaFlavors = [];
 let sections = [];
-let addons = [];
 
 const money = (amount) =>
   `$${new Intl.NumberFormat("es-CO", { maximumFractionDigits: 0 }).format(amount)} COP`;
@@ -129,20 +128,6 @@ function validateCatalog(catalog) {
   ) {
     throw new Error("La lista de sabores de pizza no es válida.");
   }
-  const addonIds = new Set();
-  if (!Array.isArray(catalog.addons)) {
-    throw new Error("La lista de adiciones no es válida.");
-  }
-  for (const addon of catalog.addons) {
-    if (
-      !isObject(addon) || !isId(addon.id) || addonIds.has(addon.id)
-      || !isText(addon.name) || !Number.isFinite(addon.price) || addon.price < 0
-    ) {
-      throw new Error("La lista de adiciones no es válida.");
-    }
-    addonIds.add(addon.id);
-  }
-
   const sectionIds = new Set();
   const productIds = new Set();
   for (const section of catalog.sections) {
@@ -165,6 +150,21 @@ function validateCatalog(catalog) {
         || (product.hasAddons !== undefined && typeof product.hasAddons !== "boolean")
       ) {
         throw new Error("Hay un producto incompleto o con un identificador repetido.");
+      }
+      if (product.addons !== undefined) {
+        const addonIds = new Set();
+        if (!Array.isArray(product.addons) || !product.addons.every((addon) => {
+          if (
+            !isObject(addon) || !isId(addon.id) || addonIds.has(addon.id)
+            || !isText(addon.name) || !Number.isFinite(addon.price) || addon.price < 0
+          ) {
+            return false;
+          }
+          addonIds.add(addon.id);
+          return true;
+        })) {
+          throw new Error("La lista de toppings o adiciones de un producto no es válida.");
+        }
       }
       productIds.add(product.id);
     }
@@ -195,6 +195,7 @@ function addToCart(product, flavors = [], selectedAddons = [], quantity = 1) {
 function openCustomization(product) {
   const isPizza = product.pizzaLimit !== undefined;
   const isSlice = isPizza && product.pizzaLimit === 0;
+  const productAddons = product.addons || [];
   const flavorOptions = isPizza ? `
     <p class="customize-instruction">${isSlice ? "Si quieres, elige un sabor para tu porción. Pregunta por disponibilidad." : `Elige de 1 a ${product.pizzaLimit} sabores. Puedes elegir uno solo o combinarlos sin costo adicional.`}</p>
     <div class="flavor-options">${pizzaFlavors.map((flavor) => `
@@ -206,7 +207,7 @@ function openCustomization(product) {
     <div class="addon-section">
       <p class="addon-heading">${isPizza ? "Agrega toppings" : "Adiciones opcionales"}</p>
       <p class="customize-instruction">Elige los extras que quieras. Se suman al precio del producto.</p>
-      <div class="flavor-options">${addons.map((addon) => `
+      <div class="flavor-options">${productAddons.map((addon) => `
         <label class="choice-option addon-choice"><input type="checkbox" name="addon" value="${escapeHTML(addon.id)}" /><span class="choice-check"></span><span>${escapeHTML(addon.name)}</span><strong>+ ${money(addon.price)}</strong></label>`).join("")}
       </div>
     </div>
@@ -254,7 +255,7 @@ function openCustomization(product) {
   const updateCustomTotal = () => {
     const extrasTotal = addonInputs
       .filter((input) => input.checked)
-      .reduce((sum, input) => sum + addons.find((addon) => addon.id === input.value).price, 0);
+      .reduce((sum, input) => sum + productAddons.find((addon) => addon.id === input.value).price, 0);
     customTotal.textContent = money((product.price + extrasTotal) * quantity);
   };
   addonInputs.forEach((input) => input.addEventListener("change", updateCustomTotal));
@@ -275,7 +276,7 @@ function openCustomization(product) {
       return;
     }
     const selectedAddons = [...customizeContent.querySelectorAll('input[name="addon"]:checked')]
-      .map((input) => addons.find((addon) => addon.id === input.value));
+      .map((input) => productAddons.find((addon) => addon.id === input.value));
     addToCart(product, flavors, selectedAddons, quantity);
     customizeDialog.close();
   });
@@ -470,7 +471,6 @@ async function initializeMenu() {
     validateCatalog(catalog);
     sections = catalog.sections;
     pizzaFlavors = catalog.pizzaFlavors;
-    addons = catalog.addons;
     renderMenu();
     renderCart();
   } catch (error) {
